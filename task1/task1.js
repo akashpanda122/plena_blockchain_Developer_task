@@ -1,6 +1,19 @@
-const Web3 = require('web3');
+const {Web3} = require('web3');
+const config = require('./config');
 
-const web3 = new Web3(window.ethereum);
+//const web3 = new Web3(window.ethereum);
+let web3;
+
+if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined')
+{
+    window.ethereum.request({ method: "eth_requestAccounts" });
+    web3 = new Web3(window.ethereum);
+}
+else
+{
+    const provider = new Web3.providers.HttpProvider(`https://mainnet.infura.io/v3/${config.infuraProjectId}`);
+    web3 = new Web3(provider);
+}
 
 const contractAddress = '0x3f2CE62DA69cc2B092f297F86BB3994499DF6756';
 const contractABI = [
@@ -29,7 +42,7 @@ const contract = new web3.eth.Contract(contractABI, contractAddress);
 
 // transaction parameters
 const txParams = {
-  from: web3.eth.defaultAccount,
+  from: '0x1114a1b2f10e5032a41EbE8F3E926182B0A7908D',
   gas: '5000000'
 };
 
